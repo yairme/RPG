@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Armour : Item
 {
-    Item item = new Item();
 
 #region Armour Properties
     /// <summary>
@@ -13,8 +12,7 @@ public class Armour : Item
         Cloth,
         Leather,
         Mail,
-        Plate,
-        Shield
+        Plate
     }
 
     /// <summary>
@@ -30,17 +28,6 @@ public class Armour : Item
         Legs,
         Boots
     }
-    #region Item Mana Properties
-        /// <summary>
-        /// The amount of mana received from the item.
-        /// </summary>
-        protected int itemMana;
-
-        /// <summary>
-        /// The rate at which mana regenerates over time.
-        /// </summary>
-        protected int itemManaRegen;
-    #endregion 
     #region Item Armor Properties
         /// <summary>
         /// The amount of armor provided by the item.
@@ -61,6 +48,10 @@ public class Armour : Item
         /// The chance of blocking an incoming attack with the item equipped.
         /// </summary>
         protected int itemBlock;
+        /// <summary>
+        /// The amount of damage blocked by the item.
+        /// </summary>
+        protected int itemBlockAmount;
 
         /// <summary>
         /// The speed bonus provided by the item.
@@ -88,5 +79,29 @@ public class Armour : Item
         /// </summary>
         protected int itemStamina;
     #endregion
+
+    #region Combat Item Properties
+            #region Item Rock Properties
+                protected bool itemRock;
+                protected int itemRockDefense;
+                protected int itemRockBlockChance;
+                protected int itemRockBlockAmount;
+                protected int itemRockDodgeChance;
+            #endregion
+            #region Item Paper Properties
+                protected bool itemPaper;
+                protected int itemPaperDefense;
+                protected int itemPaperBlockChance;
+                protected int itemPaperBlockAmount;
+                protected int itemPaperDodgeChance;
+            #endregion
+            #region Item Scissors Properties
+                protected bool itemScissors;
+                protected int itemScissorsDefense;
+                protected int itemScissorsBlockChance;
+                protected int itemScissorsBlockAmount;
+                protected int itemScissorsDodgeChance;
+            #endregion
+        #endregion
 #endregion
 }

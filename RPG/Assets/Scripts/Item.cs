@@ -1,167 +1,134 @@
 using UnityEngine;
+using UnityEngine.UI;
 public class Item : MonoBehaviour
 {   
     #region Item Properties
     /// <summary>
     /// To sort items in the inventory.
     /// </summary>
-    protected enum ItemType
+    public enum ItemType
     {
         Weapon,
         Armor,
+        trinket,
         Consumable,
         Quest,
         Key,
-        Junk,
-        CraftingMaterials,
         Currency,
-        Misc
     }
-    
-    /// <summary>
-    /// The rarity of the item.
-    /// </summary>
-    protected enum ItemRarity
-    {
-        Common,
-        Uncommon,
-        Rare,
-        Epic,
-        Legendary,
-        Mythic
-    }
-    
+    public GameObject _itemDisplay;
     /// <summary>
     /// The item icon.
     /// </summary>
-    protected Sprite itemIcon;
+    public Sprite itemIcon;
     
     /// <summary>
     /// The item name.
     /// </summary>
-    protected string itemName;
+    public string itemName;
     
     /// <summary>
     /// The item description.
     /// </summary>
-    protected string itemDescription;
+    public string itemDescription;
     
     /// <summary>
     /// The unique identifier of the item.
     /// </summary>
-    protected int itemID;
+    public int itemID;
     #endregion 
     #region Item Misc Properties
     /// <summary>
     /// The value of the item.
     /// </summary>
-    protected int itemValue;
-    
-    /// <summary>
-    /// The durability of the item.
-    /// </summary>
-    protected int itemDurability;
+    public int itemValue;
     
     /// <summary>
     /// The required level to use the item.
     /// </summary>
-    protected int itemRequiredLevel;
+    public int itemRequiredLevel;
     
     /// <summary>
     /// The rarity level of the item.
     /// </summary>
-    protected int itemRarity;
+    public int itemRarity;
     
     /// <summary>
     /// The current stack size of the item.
     /// </summary>
-    protected int itemStack;
+    public int itemStack;
     
     /// <summary>
     /// The maximum stack size of the item.
     /// </summary>
-    protected int itemMaxStack;
+    public int itemMaxStack;
     #endregion 
     #region Item Booleans
+    private bool itemStackable;
+    private bool itemConsumable;
+    private bool itemEquipable;
+    private bool itemEquipped;
+    private bool itemSellable;
+    private bool itemTradeable;
+    private bool itemQuestItem;
+    private bool itemKeyItem;
+    private bool itemUnique;
+    protected bool[] itemBools = new bool[9];
+
     /// <summary>
     /// Indicates whether the item can be stacked.
     /// </summary>
-    protected bool itemStackable;
-    
+    public bool ItemStackable { get => itemStackable; }
     /// <summary>
     /// Indicates whether the item is consumable.
     /// </summary>
-    protected bool itemConsumable;
-    
+    public bool ItemConsumable { get => itemConsumable; }
     /// <summary>
     /// Indicates whether the item can be equipped.
     /// </summary>
-    protected bool itemEquipable;
-    
+    public bool ItemEquipable { get => itemEquipable; }
     /// <summary>
     /// Indicates whether the item is currently equipped.
     /// </summary>
-    protected bool itemEquipped;
-    
+    public bool ItemEquipped { get => itemEquipped; }
     /// <summary>
     /// Indicates whether the item can be sold.
     /// </summary>
-    protected bool itemSellable;
-    
+    public bool ItemSellable { get => itemSellable; }
     /// <summary>
     /// Indicates whether the item can be traded.
     /// </summary>
-    protected bool itemTradeable;
-    
+    public bool ItemTradeable { get => itemTradeable; }
     /// <summary>
     /// Indicates whether the item is a quest item.
     /// </summary>
-    protected bool itemQuestItem;
-    
+    public bool ItemQuestItem { get => itemQuestItem; }
     /// <summary>
     /// Indicates whether the item is a key item.
     /// </summary>
-    protected bool itemKeyItem;
-    
+    public bool ItemKeyItem { get => itemKeyItem; }
     /// <summary>
     /// Indicates whether the item is unique.
     /// </summary>
-    protected bool itemUnique;
-    
+    public bool ItemUnique { get => itemUnique; }
     /// <summary>
-    /// Indicates whether the item is soulbound.
+    /// An array of item booleans.
     /// </summary>
-    protected bool itemSoulbound;
-    
-    /// <summary>
-    /// Indicates whether the item is bound on pickup.
-    /// </summary>
-    protected bool itemBindOnPickup;
-    
-    /// <summary>
-    /// Indicates whether the item is bound on equip.
-    /// </summary>
-    protected bool itemBindOnEquip;
-    
-    /// <summary>
-    /// Indicates whether the item is bound on use.
-    /// </summary>
-    protected bool itemBindOnUse;
-    
-    /// <summary>
-    /// Indicates whether the item is bound on trade.
-    /// </summary>
-    protected bool itemBindOnTrade;
-    
-    /// <summary>
-    /// Indicates whether the item is bound on craft.
-    /// </summary>
-    protected bool itemBindOnCraft;
-    #endregion 
-    protected void Update()
-    {
+    public bool[] ItemBools { get => itemBools; set => itemBools = value; }
 
+    public void Awake()
+    {
+        itemBools[0] = itemStackable;
+        itemBools[1] = itemConsumable;
+        itemBools[2] = itemEquipable;
+        itemBools[3] = itemEquipped;
+        itemBools[4] = itemSellable;
+        itemBools[5] = itemTradeable;
+        itemBools[6] = itemQuestItem;
+        itemBools[7] = itemKeyItem;
+        itemBools[8] = itemUnique;
     }
+    #endregion
     /// <summary>
     /// OnMouseOver is called when the mouse is over the GUIElement or Collider.
     /// </summary>
@@ -173,56 +140,15 @@ public class Item : MonoBehaviour
         }
     }
     /// <summary>
-    /// Soulbound the item if it meets the conditions.
-    /// </summary>
-    protected void Soulbound()
-    {
-        if (itemBindOnPickup)
-        {
-            itemSoulbound = true;
-            return;
-        }
-        if (itemBindOnEquip)
-        {
-            itemSoulbound = true;
-            return;
-        }
-        if (itemBindOnUse)
-        {
-            itemSoulbound = true;
-            return;
-        }
-        if (itemBindOnTrade)
-        {
-            itemSoulbound = true;
-            return;
-        }
-        if (itemBindOnCraft)
-        {
-            itemSoulbound = true;
-            return;
-        }
-    }
-    /// <summary>
     /// Destroys the item if it meets the conditions.
     /// </summary>
-    protected void Destroy()
+    public void Destroy(GameObject _gameObject)
     {
-        if (itemDurability <= 0)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        if (itemStack <= 0)
-        {
-            Destroy(gameObject);
-            return;
-        }
         if (itemConsumable)
         {
             if (itemStack <= 0)
             {
-                Destroy(gameObject);
+                Destroy(_gameObject);
                 return;
             }
         }
@@ -230,7 +156,7 @@ public class Item : MonoBehaviour
         {
             if (itemStack <= 0)
             {
-                Destroy(gameObject);
+                Destroy(_gameObject);
                 return;
             }
         }
@@ -238,39 +164,7 @@ public class Item : MonoBehaviour
         {
             if (itemStack <= 0)
             {
-                Destroy(gameObject);
-                return;
-            }
-        }
-        if (itemUnique)
-        {
-            if (itemStack <= 0)
-            {
-                Destroy(gameObject);
-                return;
-            }
-        }
-        if (itemSoulbound)
-        {
-            if (itemStack <= 0)
-            {
-                Destroy(gameObject);
-                return;
-            }
-        }
-        if (itemBindOnPickup)
-        {
-            if (itemStack <= 0)
-            {
-                Destroy(gameObject);
-                return;
-            }
-        }
-        if (itemBindOnEquip)
-        {
-            if (itemStack <= 0)
-            {
-                Destroy(gameObject);
+                Destroy(_gameObject);
                 return;
             }
         }
@@ -278,15 +172,8 @@ public class Item : MonoBehaviour
     /// <summary>
     /// Checks the item for miscellaneous conditions.
     /// </summary>
-    protected void MiscCheck()
+    public void MiscCheck()
     {
-        if (itemRequiredLevel > 0)
-        {
-            if (itemRequiredLevel > playerLevel)
-            {
-                Debug.Log("You are not high enough level to use this item.");
-            }
-        }
         if (itemStackable)
         {
             if (itemStack > itemMaxStack)
@@ -308,11 +195,31 @@ public class Item : MonoBehaviour
                 Debug.Log("Item has no value.");
             }
         }
-        if (itemTradeable)
+    }
+    public void ItemIconDisplay()
+    {
+        _itemDisplay.GetComponentInChildren<Image>().sprite = itemIcon;
+        if (itemStackable)
         {
-            if (itemSoulbound)
+            _itemDisplay.transform.GetComponentInChildren<Text>().text = itemStack + " / " + itemMaxStack;
+        }
+        else
+        {
+            _itemDisplay.transform.GetComponentInChildren<Text>().text = " ";
+        }
+    }
+
+    public void LevelCheck(int playerLevel)
+    {
+        if (itemRequiredLevel > 0)
+        {
+            if (itemRequiredLevel > playerLevel)
             {
-                Debug.Log("Item is soulbound.");
+                itemEquipable = false;
+            }
+            else
+            {
+                itemEquipable = true;
             }
         }
     }
